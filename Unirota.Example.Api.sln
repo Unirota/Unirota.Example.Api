@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35122.118
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unirota.Example.Api", "Unirota.Example.Api.csproj", "{6FA75046-3FCE-4BE1-8D25-B45A3C06625B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6FA75046-3FCE-4BE1-8D25-B45A3C06625B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FA75046-3FCE-4BE1-8D25-B45A3C06625B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FA75046-3FCE-4BE1-8D25-B45A3C06625B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FA75046-3FCE-4BE1-8D25-B45A3C06625B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E6377EE8-621D-479D-97E8-325D922775A7}
+	EndGlobalSection
+EndGlobal
