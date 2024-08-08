@@ -7,13 +7,13 @@ public static class ProdutoRotas
 {
     public static void AdicionarRotasDeProdutos(this WebApplication app)
     {
-        var rotasProtudos = AppContext.MapGroup("api/produtos");
+        var rotasProdutos = app.MapGroup("api/produtos");
 
 
         // Criar Produtos
         rotasProdutos.MapPost("", async (CriarProdutoRequest request, ApplicationDbContext context) => 
         {
-            var produtoExistente = await context.Produtos.AnyAsync(Produto => produto.Nome.Equals(request.Nome));
+            var produtoExistente = await context.Produtos.AnyAsync(Produto => Produto.Nome.Equals(request.Nome));
             if (produtoExistente)
                 return Results.Conflict("Já existe produto cadastrado com este nome");
             
@@ -36,7 +36,7 @@ public static class ProdutoRotas
         // Atualizar Produtos
         rotasProdutos.MapPut("{id: int}", async (int id, AlterarProdutoRequest request, ApplicationDbContext context) => 
         {
-            var produto = await context.Produtos.SingleOrDefaultAsync(produto => produto.Id.Equals(Id));
+            var produto = await context.Produtos.SingleOrDefaultAsync(produto => produto.Id.Equals(id));
 
             if (produto == null) 
                 return Results.NotFound();
@@ -54,7 +54,8 @@ public static class ProdutoRotas
         {
             var produto = await context.Produtos.SingleOrDefaultAsync(produto => produto.Id.Equals(id));
 
-            if (produto == null) return Results.NotFound();
+            if (produto == null) 
+                return Results.NotFound();
 
             context.Produtos.Remove(produto);
             await context.SaveChangesAsync();
@@ -66,7 +67,8 @@ public static class ProdutoRotas
         rotasProdutos.MapGet("{id: int}", async (int id, ApplicationDbContext context) => {
             var produto = await context.Produtos.FindAsync(id);
 
-            if (produto == null) return Results.NotFound();
+            if (produto == null) 
+                return Results.NotFound();
 
             return Results.Ok(produto);
         });

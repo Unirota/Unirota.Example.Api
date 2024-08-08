@@ -1,3 +1,4 @@
+using Unirota.Example.Api.Produtos;
 namespace Unirota.Example.Api.Produtos;
 
 public class Produto
