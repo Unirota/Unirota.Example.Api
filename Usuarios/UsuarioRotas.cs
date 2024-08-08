@@ -15,8 +15,8 @@ public static class UsuarioRotas
         rotasUsuarios.MapPost("", async (CriarUsuarioRequest request, ApplicationDbContext context) =>
         {
             var usuarioExiste = await context.Usuarios.AnyAsync(usuario => usuario.Nome.Equals(request.Nome));
-
-            if (usuarioExiste) return Results.Conflict("Já existe usuário cadastrado com este nome");
+            if (usuarioExiste) 
+                return Results.Conflict("Já existe usuário cadastrado com este nome");
 
             var novoUsuario = new Usuario(request.Nome);
 
@@ -30,7 +30,7 @@ public static class UsuarioRotas
         //TODO: retornar somente usuarios ativos
         rotasUsuarios.MapGet("", async (ApplicationDbContext context) =>
         {
-            var usuarios = await context.Usuarios.ToListAsync();
+            var usuarios = await context.Usuarios.Where(u => u.Ativo).ToListAsync();
 
             return Results.Ok(usuarios);
         });
@@ -42,9 +42,13 @@ public static class UsuarioRotas
         {
             var usuario = await context.Usuarios.SingleOrDefaultAsync(usuario => usuario.Id.Equals(id));
 
-            if (usuario == null) return Results.NotFound();
+            if (usuario == null)
+                return Results.NotFound();
 
             usuario.AtualizarNome(request.Nome);
+
+            context.Usuarios.Update(usuario);
+            await context.SaveChangesAsync();
 
             return Results.Ok(usuario);
         });
@@ -53,7 +57,8 @@ public static class UsuarioRotas
         {
             var usuario = await context.Usuarios.SingleOrDefaultAsync(usuario => usuario.Id.Equals(id));
 
-            if (usuario == null) return Results.NotFound();
+            if (usuario == null) 
+                return Results.NotFound();
 
             usuario.Desativar();
 
@@ -63,5 +68,12 @@ public static class UsuarioRotas
         });
 
         //TODO: Implementar GetById de usuário
+        rotasUsuarios.MapGet("{id: int}", async (int id, ApplicationDbContext context) => {
+            var usuario = await context.Usuarios.FindAsync(id);
+
+            if (usuario == null) return Results.NotFound();
+
+            return Results.Ok(usuario);
+        });
     }
 }
