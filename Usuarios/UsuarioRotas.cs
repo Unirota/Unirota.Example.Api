@@ -11,7 +11,7 @@ public static class UsuarioRotas
         var rotasUsuarios = app.MapGroup("api/usuarios");
 
 
-        //criar usuario
+
         rotasUsuarios.MapPost("", async (CriarUsuarioRequest request, ApplicationDbContext context) =>
         {
             var usuarioExiste = await context.Usuarios.AnyAsync(usuario => usuario.Nome.Equals(request.Nome));
@@ -26,8 +26,6 @@ public static class UsuarioRotas
             return Results.Ok(novoUsuario);
         });
 
-        //retornar todos usuarios
-        //TODO: retornar somente usuarios ativos
         rotasUsuarios.MapGet("", async (ApplicationDbContext context) =>
         {
             var usuarios = await context.Usuarios.ToListAsync();
@@ -35,19 +33,31 @@ public static class UsuarioRotas
             return Results.Ok(usuarios);
         });
 
-        //Atualizar usuario
-        //TODO: Corrigir detalhe que esta faltando (tem na doc)
-        //dica: não esta salvando alteração no banco
-        rotasUsuarios.MapPut("{id:int}", async (int id, AlterarUsuarioRequest request, ApplicationDbContext context) =>
+
+        rotasUsuarios.MapGet("/ativos", async (ApplicationDbContext context) =>
         {
-            var usuario = await context.Usuarios.SingleOrDefaultAsync(usuario => usuario.Id.Equals(id));
+            var usuariosAtivos = await context.Usuarios.Where(usuario => usuario.Ativo).ToListAsync();
+
+            return Results.Ok(usuariosAtivos);
+        });
+
+
+        //Atualizar usuario
+        rotasUsuarios.MapPut("{id:int}", async 
+        (int id, AlterarUsuarioRequest request, ApplicationDbContext context) =>
+        {
+            var usuario = await context.Usuarios.SingleOrDefaultAsync
+            (usuario => usuario.Id.Equals(id));
 
             if (usuario == null) return Results.NotFound();
 
             usuario.AtualizarNome(request.Nome);
 
+            await context.SaveChangesAsync();
+
             return Results.Ok(usuario);
         });
+
 
         rotasUsuarios.MapDelete("{id:int}", async (int id, ApplicationDbContext context) =>
         {
@@ -57,11 +67,20 @@ public static class UsuarioRotas
 
             usuario.Desativar();
 
-            await context.SaveChangesAsync();
+            context.Remove(usuario);
 
             return Results.Ok();
         });
 
-        //TODO: Implementar GetById de usuário
+
+        rotasUsuarios.MapGet("/{id:int}", async (int id, ApplicationDbContext context) =>
+        {
+            var usuarios = await context.Usuarios.SingleOrDefaultAsync(usuario => usuario.Id.Equals(id));
+
+            if (usuarios == null) return Results.NotFound("Usuário não encontrado");
+
+            return Results.Ok(usuarios);
+        });
     }
 }
+
