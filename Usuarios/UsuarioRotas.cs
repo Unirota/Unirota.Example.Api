@@ -34,10 +34,20 @@ public static class UsuarioRotas
 
             return Results.Ok(usuarios);
         });
+          rotasUsuarios.MapGet("", async (ApplicationDbContext context) =>
+        {
+            var usuarios = await context.Usuarios.ToListAsync();
 
-        //Atualizar usuario
-        //TODO: Corrigir detalhe que esta faltando (tem na doc)
-        //dica: não esta salvando alteração no banco
+            return Results.Ok(usuarios);
+        });
+        rotasUsuarios.MapGet("ativos", async (ApplicationDbContext context) =>
+       {
+    var usuariosAtivos = await context.Usuarios
+        .Where(usuario => usuario.Ativo)
+        .ToListAsync();
+
+         return Results.Ok(usuariosAtivos);
+     });
         rotasUsuarios.MapPut("{id:int}", async (int id, AlterarUsuarioRequest request, ApplicationDbContext context) =>
         {
             var usuario = await context.Usuarios.SingleOrDefaultAsync(usuario => usuario.Id.Equals(id));
@@ -61,7 +71,7 @@ public static class UsuarioRotas
 
             return Results.Ok();
         });
-
+    rotasUsuarios.GetById("{id:int}", async())
         //TODO: Implementar GetById de usuário
     }
 }
