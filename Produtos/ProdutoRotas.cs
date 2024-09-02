@@ -16,7 +16,7 @@ public static class ProdutoRotas
 
             if (produtoExiste) return Results.Conflict("Já existe produto cadastrado com este nome");
 
-            var novoProduto = new Produto(request.Nome);
+            var novoProduto = new Produto(request.Nome, request.Quantidade);
 
             await context.Produtos.AddAsync(novoProduto);
             await context.SaveChangesAsync();
