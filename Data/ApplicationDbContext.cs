@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Unirota.Example.Api.Produtos;
 using Unirota.Example.Api.Usuarios;
 
 namespace Unirota.Example.Api.Data;
@@ -6,6 +7,7 @@ namespace Unirota.Example.Api.Data;
 public class ApplicationDbContext : DbContext
 {
     public DbSet<Usuario> Usuarios { get; set; }
+    public DbSet<Produto> Produtos { get; set; }
 
     //TODO: Criar mais um DbSet de uma entidade qualquer, e seu CRUD simples
     //lembre de executar o dotnet ef migrations add "nomeDaMigration"

@@ -1,4 +1,5 @@
 using Unirota.Example.Api.Data;
+using Unirota.Example.Api.Produtos;
 using Unirota.Example.Api.Usuarios;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,5 +24,6 @@ app.UseHttpsRedirection();
 
 //Configuração rota de Usuario
 app.AdicionarRotasDeUsuario();
+app.AdicionarRotasDeProduto();
 
 app.Run();
